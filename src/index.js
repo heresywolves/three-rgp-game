@@ -2,6 +2,8 @@ import './styles.css'
 import * as THREE from 'three'
 import { Face } from 'three/addons/math/ConvexHull.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import playerTexture from './player-sprite.png'
+import SpriteFlipbook from './SpriteFlipbook';
 
 // Setup scene
 const scene = new THREE.Scene();
@@ -36,12 +38,23 @@ orbit.update();
 
 
 // Create a box
-const boxGeometry = new THREE.BoxGeometry();
-const boxMaterial = new THREE.MeshBasicMaterial({color: 0x00FF00});
-const player = new THREE.Mesh(boxGeometry, boxMaterial);
-scene.add(player);
-player.position.set(0, 0.5 ,0);
-console.log(player.position.x);
+// const boxGeometry = new THREE.BoxGeometry();
+// const boxMaterial = new THREE.MeshBasicMaterial({color: 0x00FF00});
+// const player = new THREE.Mesh(boxGeometry, boxMaterial);
+// scene.add(player);
+// player.position.set(0, 0.5 ,0);
+// console.log(player.position.x);
+
+
+// Sprite
+let playerSprite = SpriteFlipbook(playerTexture, 8, 3, scene);
+console.log(playerSprite);
+playerSprite.loop([0,1,2,3], 0.6);
+playerSprite.sprite.position.x = 1;
+const player = playerSprite.sprite;
+player.scale.set(3,3,3); //Triple the size
+
+
 
 // Smoothness for lerping 
 const smoothness = 0.1 // 0 to 1 only
@@ -100,7 +113,10 @@ function getViewportPosition(mesh, camera) {
   
 let keyMap = {};
 
+const clock = new THREE.Clock();
+
 function animate() {
+  let deltaTime = clock.getDelta();
   requestAnimationFrame( animate );
   
   document.onkeydown = onkeyup = function(e) {
@@ -109,6 +125,8 @@ function animate() {
   }
 
   movePlayer(keyMap);
+
+  playerSprite.update(deltaTime);
 
 	renderer.render( scene, camera );
 }

@@ -110,13 +110,33 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
 
 /***/ }),
 
+/***/ "./src/SpriteFlipbook.js":
+/*!*******************************!*\
+  !*** ./src/SpriteFlipbook.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ \"./node_modules/three/build/three.module.js\");\n\r\n\r\nconst SpriteFlipbook = (spriteTexture, tilesHoriz, tilesVert, scene) => {\r\n  let currentTile = 0;\r\n  const map = new three__WEBPACK_IMPORTED_MODULE_0__.TextureLoader().load(spriteTexture);\r\n  map.repeat.set(1/tilesHoriz, 1/tilesVert);\r\n  map.magFilter = three__WEBPACK_IMPORTED_MODULE_0__.NearestFilter; // sharper pixels\r\n  const playerMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.SpriteMaterial({map: map});\r\n  const sprite = new three__WEBPACK_IMPORTED_MODULE_0__.Sprite(playerMaterial);\r\n  \r\n  sprite.position.y = 1.5;\r\n  console.log(sprite);\r\n  scene.add(sprite);\r\n\r\n  let playSpriteIndices = [];\r\n  let runningTileArrayIndex = 0;\r\n  let maxDiplayTime = 0;\r\n  let elapsedTime = 0;\r\n\r\n  function loop(playSpriteIndicesAttr, totalDuration) {\r\n    playSpriteIndices = playSpriteIndicesAttr;\r\n    runningTileArrayIndex = 0;\r\n    currentTile = playSpriteIndices[runningTileArrayIndex];\r\n    maxDiplayTime = totalDuration / playSpriteIndices.length;\r\n  }\r\n  \r\n\r\n  function update(delta) {\r\n    elapsedTime += delta;\r\n\r\n    if (maxDiplayTime > 0 && elapsedTime >= maxDiplayTime) {\r\n      elapsedTime = 0;\r\n      runningTileArrayIndex = (runningTileArrayIndex + 1) % playSpriteIndices.length;\r\n      currentTile = playSpriteIndices[runningTileArrayIndex];\r\n      const offsetX = (currentTile % tilesHoriz) / tilesHoriz;\r\n      const offsetY = (tilesVert - Math.floor(currentTile / tilesHoriz) - 1) / tilesVert;\r\n      map.offset.x = offsetX;\r\n      map.offset.y = offsetY;\r\n    }\r\n\r\n  }\r\n\r\n  return { update, loop, sprite }\r\n};\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SpriteFlipbook);\r\n\r\n\n\n//# sourceURL=webpack://webgltut/./src/SpriteFlipbook.js?");
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _styles_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles.css */ \"./src/styles.css\");\n/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ \"./node_modules/three/build/three.module.js\");\n/* harmony import */ var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ \"./node_modules/three/examples/jsm/controls/OrbitControls.js\");\n\r\n\r\n\r\n\r\n\r\n// Setup scene\r\nconst scene = new three__WEBPACK_IMPORTED_MODULE_1__.Scene();\r\nconst camera = new three__WEBPACK_IMPORTED_MODULE_1__.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );\r\ncamera.position.set(0, 10, 3);\r\n\r\n\r\nconst geometry = new three__WEBPACK_IMPORTED_MODULE_1__.PlaneGeometry( 30, 30 );\r\nconst material = new three__WEBPACK_IMPORTED_MODULE_1__.MeshBasicMaterial( {color: 0xF4E4E0, side: three__WEBPACK_IMPORTED_MODULE_1__.DoubleSide} );\r\nconst plane = new three__WEBPACK_IMPORTED_MODULE_1__.Mesh( geometry, material );\r\nscene.add( plane );\r\nplane.rotation.x = -0.5 * Math.PI;\r\n\r\n\r\n// Add grid helper\r\nconst gridHelper = new three__WEBPACK_IMPORTED_MODULE_1__.GridHelper(30);\r\nscene.add(gridHelper);\r\n\r\n// Axis helper guide initiation. 5 represents the length of the axis\r\nconst axesHelper = new three__WEBPACK_IMPORTED_MODULE_1__.AxesHelper(5);\r\nscene.add(axesHelper);\r\n\r\n\r\n// Adding renderer\r\nconst renderer = new three__WEBPACK_IMPORTED_MODULE_1__.WebGLRenderer();\r\nrenderer.setSize( window.innerWidth, window.innerHeight );\r\ndocument.body.appendChild( renderer.domElement );\r\n\r\n// Create Orbit control instance\r\nconst orbit = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_2__.OrbitControls(camera, renderer.domElement);\r\norbit.update();\r\n\r\n\r\n// Create a box\r\nconst boxGeometry = new three__WEBPACK_IMPORTED_MODULE_1__.BoxGeometry();\r\nconst boxMaterial = new three__WEBPACK_IMPORTED_MODULE_1__.MeshBasicMaterial({color: 0x00FF00});\r\nconst player = new three__WEBPACK_IMPORTED_MODULE_1__.Mesh(boxGeometry, boxMaterial);\r\nscene.add(player);\r\nplayer.position.set(0, 0.5 ,0);\r\nconsole.log(player.position.x);\r\n\r\n// Smoothness for lerping \r\nconst smoothness = 0.1 // 0 to 1 only\r\n\r\nfunction moveCamera () {\r\n  let cameraTargetPosition = camera.position.clone();\r\n  let playerViewportPosition = getViewportPosition(player, camera);\r\n  if (playerViewportPosition.x < 200) {\r\n    cameraTargetPosition.x -= 2;\r\n  }\r\n  if (playerViewportPosition.x > window.innerWidth - 200) {\r\n    cameraTargetPosition.x += 2;\r\n  }\r\n  if (playerViewportPosition.y < 150) {\r\n    cameraTargetPosition.z -= 2;\r\n  }\r\n  if (playerViewportPosition.y > window.innerHeight - 150) {\r\n    cameraTargetPosition.z += 2;\r\n  }\r\n  camera.position.lerp(cameraTargetPosition, smoothness);\r\n}\r\n\r\nfunction movePlayer(keyMap) {\r\n  let targetPosition = player.position.clone();\r\n  if (keyMap['a'] === true) {\r\n    targetPosition.x -= 2;\r\n  }\r\n  if (keyMap['d'] === true) {\r\n    targetPosition.x += 2;\r\n  }\r\n  if (keyMap['w'] === true) {\r\n    targetPosition.z -= 2;\r\n  }\r\n  if (keyMap['s'] === true) {\r\n    targetPosition.z += 2;\r\n  }\r\n  player.position.lerp(targetPosition, smoothness);\r\n  moveCamera();\r\n}\r\n\r\nfunction getViewportPosition(mesh, camera) {\r\n  // Get the position of the mesh in world coordinates\r\n  let meshPosition = new three__WEBPACK_IMPORTED_MODULE_1__.Vector3();\r\n  mesh.getWorldPosition(meshPosition);\r\n\r\n  // Project the world coordinates into screen coordinates\r\n  let screenPosition = meshPosition.clone().project(camera);\r\n\r\n  // Convert the screen coordinates to viewport coordinates\r\n  let viewportPosition = new three__WEBPACK_IMPORTED_MODULE_1__.Vector2(\r\n      (screenPosition.x + 1) / 2 * window.innerWidth,\r\n      (-screenPosition.y + 1) / 2 * window.innerHeight\r\n  );\r\n  return viewportPosition\r\n}\r\n  \r\nlet keyMap = {};\r\n\r\nfunction animate() {\r\n  requestAnimationFrame( animate );\r\n  \r\n  document.onkeydown = onkeyup = function(e) {\r\n    // console.log(keyMap)\r\n    keyMap[e.key] = e.type == 'keydown';\r\n  }\r\n\r\n  movePlayer(keyMap);\r\n\r\n\trenderer.render( scene, camera );\r\n}\r\nanimate();\n\n//# sourceURL=webpack://webgltut/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _styles_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles.css */ \"./src/styles.css\");\n/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! three */ \"./node_modules/three/build/three.module.js\");\n/* harmony import */ var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ \"./node_modules/three/examples/jsm/controls/OrbitControls.js\");\n/* harmony import */ var _player_sprite_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./player-sprite.png */ \"./src/player-sprite.png\");\n/* harmony import */ var _SpriteFlipbook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SpriteFlipbook */ \"./src/SpriteFlipbook.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n// Setup scene\r\nconst scene = new three__WEBPACK_IMPORTED_MODULE_3__.Scene();\r\nconst camera = new three__WEBPACK_IMPORTED_MODULE_3__.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );\r\ncamera.position.set(0, 10, 3);\r\n\r\n\r\nconst geometry = new three__WEBPACK_IMPORTED_MODULE_3__.PlaneGeometry( 30, 30 );\r\nconst material = new three__WEBPACK_IMPORTED_MODULE_3__.MeshBasicMaterial( {color: 0xF4E4E0, side: three__WEBPACK_IMPORTED_MODULE_3__.DoubleSide} );\r\nconst plane = new three__WEBPACK_IMPORTED_MODULE_3__.Mesh( geometry, material );\r\nscene.add( plane );\r\nplane.rotation.x = -0.5 * Math.PI;\r\n\r\n\r\n// Add grid helper\r\nconst gridHelper = new three__WEBPACK_IMPORTED_MODULE_3__.GridHelper(30);\r\nscene.add(gridHelper);\r\n\r\n// Axis helper guide initiation. 5 represents the length of the axis\r\nconst axesHelper = new three__WEBPACK_IMPORTED_MODULE_3__.AxesHelper(5);\r\nscene.add(axesHelper);\r\n\r\n\r\n// Adding renderer\r\nconst renderer = new three__WEBPACK_IMPORTED_MODULE_3__.WebGLRenderer();\r\nrenderer.setSize( window.innerWidth, window.innerHeight );\r\ndocument.body.appendChild( renderer.domElement );\r\n\r\n// Create Orbit control instance\r\nconst orbit = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_4__.OrbitControls(camera, renderer.domElement);\r\norbit.update();\r\n\r\n\r\n// Create a box\r\n// const boxGeometry = new THREE.BoxGeometry();\r\n// const boxMaterial = new THREE.MeshBasicMaterial({color: 0x00FF00});\r\n// const player = new THREE.Mesh(boxGeometry, boxMaterial);\r\n// scene.add(player);\r\n// player.position.set(0, 0.5 ,0);\r\n// console.log(player.position.x);\r\n\r\n\r\n// Sprite\r\nlet playerSprite = (0,_SpriteFlipbook__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(_player_sprite_png__WEBPACK_IMPORTED_MODULE_1__, 8, 3, scene);\r\nconsole.log(playerSprite);\r\nplayerSprite.loop([0,1,2,3], 0.6);\r\nplayerSprite.sprite.position.x = 1;\r\nconst player = playerSprite.sprite;\r\nplayer.scale.set(3,3,3); //Triple the size\r\n\r\n\r\n\r\n// Smoothness for lerping \r\nconst smoothness = 0.1 // 0 to 1 only\r\n\r\nfunction moveCamera () {\r\n  let cameraTargetPosition = camera.position.clone();\r\n  let playerViewportPosition = getViewportPosition(player, camera);\r\n  if (playerViewportPosition.x < 200) {\r\n    cameraTargetPosition.x -= 2;\r\n  }\r\n  if (playerViewportPosition.x > window.innerWidth - 200) {\r\n    cameraTargetPosition.x += 2;\r\n  }\r\n  if (playerViewportPosition.y < 150) {\r\n    cameraTargetPosition.z -= 2;\r\n  }\r\n  if (playerViewportPosition.y > window.innerHeight - 150) {\r\n    cameraTargetPosition.z += 2;\r\n  }\r\n  camera.position.lerp(cameraTargetPosition, smoothness);\r\n}\r\n\r\nfunction movePlayer(keyMap) {\r\n  let targetPosition = player.position.clone();\r\n  if (keyMap['a'] === true) {\r\n    targetPosition.x -= 2;\r\n  }\r\n  if (keyMap['d'] === true) {\r\n    targetPosition.x += 2;\r\n  }\r\n  if (keyMap['w'] === true) {\r\n    targetPosition.z -= 2;\r\n  }\r\n  if (keyMap['s'] === true) {\r\n    targetPosition.z += 2;\r\n  }\r\n  player.position.lerp(targetPosition, smoothness);\r\n  moveCamera();\r\n}\r\n\r\nfunction getViewportPosition(mesh, camera) {\r\n  // Get the position of the mesh in world coordinates\r\n  let meshPosition = new three__WEBPACK_IMPORTED_MODULE_3__.Vector3();\r\n  mesh.getWorldPosition(meshPosition);\r\n\r\n  // Project the world coordinates into screen coordinates\r\n  let screenPosition = meshPosition.clone().project(camera);\r\n\r\n  // Convert the screen coordinates to viewport coordinates\r\n  let viewportPosition = new three__WEBPACK_IMPORTED_MODULE_3__.Vector2(\r\n      (screenPosition.x + 1) / 2 * window.innerWidth,\r\n      (-screenPosition.y + 1) / 2 * window.innerHeight\r\n  );\r\n  return viewportPosition\r\n}\r\n  \r\nlet keyMap = {};\r\n\r\nconst clock = new three__WEBPACK_IMPORTED_MODULE_3__.Clock();\r\n\r\nfunction animate() {\r\n  let deltaTime = clock.getDelta();\r\n  requestAnimationFrame( animate );\r\n  \r\n  document.onkeydown = onkeyup = function(e) {\r\n    // console.log(keyMap)\r\n    keyMap[e.key] = e.type == 'keydown';\r\n  }\r\n\r\n  movePlayer(keyMap);\r\n\r\n  playerSprite.update(deltaTime);\r\n\r\n\trenderer.render( scene, camera );\r\n}\r\nanimate();\n\n//# sourceURL=webpack://webgltut/./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/player-sprite.png":
+/*!*******************************!*\
+  !*** ./src/player-sprite.png ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("module.exports = __webpack_require__.p + \"532185fdb40717e20915.png\";\n\n//# sourceURL=webpack://webgltut/./src/player-sprite.png?");
 
 /***/ }),
 
@@ -191,6 +211,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
@@ -205,6 +237,29 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src;
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) {
+/******/ 					var i = scripts.length - 1;
+/******/ 					while (i > -1 && !scriptUrl) scriptUrl = scripts[i--].src;
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/nonce */
