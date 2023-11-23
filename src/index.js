@@ -1,11 +1,20 @@
 import './styles.css'
 import * as THREE from 'three'
-import { Face } from 'three/addons/math/ConvexHull.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import PlayerAnimation from './PlayerAnimation';
 import LevelController from './levelController';
+import * as STATS from 'stats.js';
 
+// Set up Stats
+const stats = new STATS();
+stats.showPanel(0); // 0: FPS, 1: ms, 2: MB, 3+: custom
+document.body.appendChild(stats.dom);
 
+const stats2 = new STATS();
+stats2.showPanel(2); // 0: FPS, 1: ms, 2: MB, 3+: custom
+stats2.dom.style.position = 'absolute';
+stats2.dom.style.top = '48px';
+document.body.appendChild(stats2.dom);
 
 // Setup scene
 const scene = new THREE.Scene();
@@ -110,6 +119,9 @@ let keyMap = {};
 const clock = new THREE.Clock();
 
 function animate() {
+  stats.begin();
+  stats2.begin();
+
   let deltaTime = clock.getDelta();
   requestAnimationFrame( animate );
   
@@ -124,5 +136,7 @@ function animate() {
 
 
 	renderer.render( scene, camera );
+  stats2.end();
+  stats.end();
 }
 animate();

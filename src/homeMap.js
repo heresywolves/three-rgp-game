@@ -3,7 +3,7 @@ import groundTextureImport from './maptextures/ground-texture.jpg'
 
 const HomeMap = (scene) => {
   
-  const size = 10;
+  const size = 20;
   const tiles = [];
   let offsetX = 0.5 - (size / 2);
   let offsetY = 0.5 - (size / 2);
