@@ -34,7 +34,7 @@ const gridHelper = new THREE.GridHelper(30);
 scene.add(gridHelper);
 
 // Axis helper guide initiation. 5 represents the length of the axis
-const axesHelper = new THREE.AxesHelper(5);
+const axesHelper = new THREE.AxesHelper(1);
 scene.add(axesHelper);
 
 
@@ -54,7 +54,8 @@ const playerAnimation = PlayerAnimation(scene);
 const player = playerAnimation.player;
 
 
-LevelController(scene);
+const levelController = LevelController(scene);
+levelController.render('home');
 
 
 // Smoothness for lerping 
