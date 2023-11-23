@@ -2,9 +2,9 @@ import './styles.css'
 import * as THREE from 'three'
 import { Face } from 'three/addons/math/ConvexHull.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
-import playerTextureLeft from './player-sprite-left.png'
-import SpriteFlipbook from './SpriteFlipbook';
 import PlayerAnimation from './PlayerAnimation';
+import LevelController from './levelController';
+
 
 
 // Setup scene
@@ -44,6 +44,8 @@ orbit.update();
 const playerAnimation = PlayerAnimation(scene);
 const player = playerAnimation.player;
 
+
+LevelController(scene);
 
 
 // Smoothness for lerping 

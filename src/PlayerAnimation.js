@@ -14,7 +14,7 @@ const PlayerAnimation = (scene) => {
   const box = new THREE.Mesh(boxGeometry, boxMaterial);
   let player = box;
   player.position.y = 1.5;
-  player.scale.set(3,3,3);
+  player.scale.set(1.5,2,2);
   scene.add(box);
 
   // Sprite right

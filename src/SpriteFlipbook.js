@@ -34,7 +34,7 @@ const SpriteFlipbook = (spriteTexture, tilesHoriz, scene) => {
       currentTile = playSpriteIndices[runningTileArrayIndex];
       const offsetX = (currentTile % tilesHoriz) / tilesHoriz;
       map.offset.x = offsetX;
-      console.log('keyframe:', currentTile);
+      // console.log('keyframe:', currentTile);
     }
   }
 
