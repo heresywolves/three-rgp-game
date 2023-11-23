@@ -5,6 +5,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import playerTexture from './player-sprite.png'
 import SpriteFlipbook from './SpriteFlipbook';
 
+
 // Setup scene
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -37,22 +38,13 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.update();
 
 
-// Create a box
-// const boxGeometry = new THREE.BoxGeometry();
-// const boxMaterial = new THREE.MeshBasicMaterial({color: 0x00FF00});
-// const player = new THREE.Mesh(boxGeometry, boxMaterial);
-// scene.add(player);
-// player.position.set(0, 0.5 ,0);
-// console.log(player.position.x);
-
-
-// Sprite
-let playerSprite = SpriteFlipbook(playerTexture, 8, 3, scene);
-console.log(playerSprite);
-playerSprite.loop([0,1,2,3], 0.6);
-playerSprite.sprite.position.x = 1;
+// Sprite right
+let playerSprite = SpriteFlipbook(playerTexture, 8, scene);
+playerSprite.loop([0,1,2,3,4,5,6,7], 3.6);
+playerSprite.sprite.position.x = 1
 const player = playerSprite.sprite;
-player.scale.set(3,3,3); //Triple the size
+player.scale.set(3,4,3); //Triple the size
+
 
 
 
