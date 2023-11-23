@@ -6,17 +6,10 @@ const SpriteFlipbook = (spriteTexture, tilesHoriz, scene) => {
   map.magFilter = THREE.NearestFilter; // sharper pixels
   const playerMaterial = new THREE.SpriteMaterial({map: map});
   const sprite = new THREE.Sprite(playerMaterial);
+
   sprite.center.set(0.5, 0.5);
-
-
-  //Create a container for the sprite
-  const container = new THREE.Object3D();
-  
-  container.add(sprite);
   sprite.position.y = 1.5;
-  scene.add(container);
-
-  // scene.add(sprite);
+  scene.add(sprite);
   
   let currentTile = 0;
   let playSpriteIndices = [];
@@ -45,7 +38,17 @@ const SpriteFlipbook = (spriteTexture, tilesHoriz, scene) => {
     }
   }
 
-  return { update, loop, sprite }
+  function changeTexture(newTexture) {
+    newTexture.repeat.set(1/tilesHoriz, 1);
+    newTexture.magFilter = THREE.NearestFilter; // sharper pixels
+    sprite.material.map = newTexture;
+    sprite.material.needsUpdate = true;
+    sprite.center.set(0.5, 0.5);
+    sprite.position.y = 1.5;
+    console.log('changing texture');
+  }
+
+  return { update, loop, sprite, changeTexture }
 };
 
 

@@ -2,8 +2,9 @@ import './styles.css'
 import * as THREE from 'three'
 import { Face } from 'three/addons/math/ConvexHull.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
-import playerTexture from './player-sprite.png'
+import playerTextureLeft from './player-sprite-left.png'
 import SpriteFlipbook from './SpriteFlipbook';
+import PlayerAnimation from './PlayerAnimation';
 
 
 // Setup scene
@@ -38,13 +39,10 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.update();
 
 
-// Sprite right
-let playerSprite = SpriteFlipbook(playerTexture, 8, scene);
-playerSprite.loop([0,1,2,3,4,5,6,7], 3.6);
-playerSprite.sprite.position.x = 1
-const player = playerSprite.sprite;
-player.scale.set(3,4,3); //Triple the size
 
+
+const playerAnimation = PlayerAnimation(scene);
+const player = playerAnimation.player;
 
 
 
@@ -73,9 +71,11 @@ function movePlayer(keyMap) {
   let targetPosition = player.position.clone();
   if (keyMap['a'] === true) {
     targetPosition.x -= 2;
+    playerAnimation.changeDirection('left');
   }
   if (keyMap['d'] === true) {
     targetPosition.x += 2;
+    playerAnimation.changeDirection('right');
   }
   if (keyMap['w'] === true) {
     targetPosition.z -= 2;
@@ -118,7 +118,8 @@ function animate() {
 
   movePlayer(keyMap);
 
-  playerSprite.update(deltaTime);
+  playerAnimation.update(deltaTime);
+
 
 	renderer.render( scene, camera );
 }
