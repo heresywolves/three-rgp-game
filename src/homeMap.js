@@ -2,17 +2,18 @@ import * as THREE from 'three'
 import groundTextureImport from './maptextures/ground-texture.jpg'
 
 const HomeMap = (scene) => {
+
+  // Load ground texture
+  const textureLoader = new THREE.TextureLoader();
+  const groundTexture = textureLoader.load(groundTextureImport);
   
-  const size = 20;
+  const size = 200;
   const tiles = [];
   let offsetX = 0.5 - (size / 2);
   let offsetY = 0.5 - (size / 2);
 
   for (let k = 0; k < size; k++, offsetY++) {
     for (let i = 0; i < size; i++, offsetX++) {
-      // Load ground texture
-      const textureLoader = new THREE.TextureLoader();
-      const groundTexture = textureLoader.load(groundTextureImport);
 
       // Create a plane geometry
       const planeGeometry = new THREE.PlaneGeometry(1, 1); // You can adjust the size of the plane
