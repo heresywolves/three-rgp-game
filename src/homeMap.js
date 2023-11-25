@@ -7,7 +7,7 @@ const HomeMap = (scene) => {
   const textureLoader = new THREE.TextureLoader();
   const groundTexture = textureLoader.load(groundTextureImport);
   
-  const size = 200;
+  const size = 60;
   const tiles = [];
   let offsetX = 0.5 - (size / 2);
   let offsetY = 0.5 - (size / 2);

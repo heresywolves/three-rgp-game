@@ -4,6 +4,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import PlayerAnimation from './PlayerAnimation';
 import LevelController from './levelController';
 import * as STATS from 'stats.js';
+import UI from './ui';
 
 // Set up Stats
 const stats = new STATS();
@@ -18,8 +19,8 @@ document.body.appendChild(stats2.dom);
 
 // Setup scene
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.set(0, 10, 3);
+const camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000 );
+camera.position.set(0, 15, 3);
 
 
 const geometry = new THREE.PlaneGeometry( 30, 30 );
@@ -48,6 +49,7 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.update();
 
 
+const mapSize = 60;
 
 
 const playerAnimation = PlayerAnimation(scene);
@@ -57,43 +59,48 @@ const player = playerAnimation.player;
 const levelController = LevelController(scene);
 levelController.render('home');
 
+// Add UI
+UI.itemBar.show();
+
 
 // Smoothness for lerping 
 const smoothness = 0.1 // 0 to 1 only
 
+const runningSpeed = 1;
+
 function moveCamera () {
   let cameraTargetPosition = camera.position.clone();
   let playerViewportPosition = getViewportPosition(player, camera);
-  if (playerViewportPosition.x < 200) {
-    cameraTargetPosition.x -= 2;
+  if (playerViewportPosition.x < 300) {
+    cameraTargetPosition.x -= runningSpeed;
   }
-  if (playerViewportPosition.x > window.innerWidth - 200) {
-    cameraTargetPosition.x += 2;
+  if (playerViewportPosition.x > window.innerWidth - 300) {
+    cameraTargetPosition.x += runningSpeed;
   }
-  if (playerViewportPosition.y < 150) {
-    cameraTargetPosition.z -= 2;
+  if (playerViewportPosition.y < 250) {
+    cameraTargetPosition.z -= runningSpeed;
   }
-  if (playerViewportPosition.y > window.innerHeight - 150) {
-    cameraTargetPosition.z += 2;
+  if (playerViewportPosition.y > window.innerHeight - 350) {
+    cameraTargetPosition.z += runningSpeed;
   }
   camera.position.lerp(cameraTargetPosition, smoothness);
 }
 
 function movePlayer(keyMap) {
   let targetPosition = player.position.clone();
-  if (keyMap['a'] === true) {
-    targetPosition.x -= 2;
+  if (keyMap['a'] === true && targetPosition.x > -(mapSize / 2 - 1)) {
+    targetPosition.x -= runningSpeed;
     playerAnimation.changeDirection('left');
   }
-  if (keyMap['d'] === true) {
-    targetPosition.x += 2;
+  if (keyMap['d'] === true && targetPosition.x < (mapSize / 2 - 1)) {
+    targetPosition.x += runningSpeed;
     playerAnimation.changeDirection('right');
   }
-  if (keyMap['w'] === true) {
-    targetPosition.z -= 2;
+  if (keyMap['w'] === true && targetPosition.z > -(mapSize / 2 - 1)) {
+    targetPosition.z -= runningSpeed;
   }
-  if (keyMap['s'] === true) {
-    targetPosition.z += 2;
+  if (keyMap['s'] === true && targetPosition.z < (mapSize / 2 - 1)) {
+    targetPosition.z += runningSpeed;
   }
   player.position.lerp(targetPosition, smoothness);
   moveCamera();
