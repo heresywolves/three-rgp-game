@@ -6,7 +6,6 @@ import LevelController from './levelController';
 import * as STATS from 'stats.js';
 import UI from './ui';
 import Materials from './Materials';
-import dirtTextureImport from './maptextures/dirt-texture.jpg'
 
 // Set up Stats
 const stats = new STATS();
@@ -80,8 +79,17 @@ function onDocumentClick(event) {
   if (intersects.length > 0) {
     const clickedPlane = intersects[0].object;
 
-    // Change the material to the clicked texture
-    clickedPlane.material = Materials.dirtMaterial;
+    // Variables to check proximity to the player
+    const playerPosition = player.position.clone();
+    const planePosition = clickedPlane.position.clone();
+    const distance = planePosition.distanceTo(playerPosition);
+
+    // Change the material to the clicked texture if the distance is within
+    // allowed poximity
+    console.log(distance);
+    if (distance < 2.5) {
+      clickedPlane.material = Materials.dirtMaterial;
+    }
   }
 
 }
