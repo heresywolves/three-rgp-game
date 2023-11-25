@@ -8,7 +8,7 @@ const SpriteFlipbook = (spriteTexture, tilesHoriz, scene) => {
   const sprite = new THREE.Sprite(playerMaterial);
 
   sprite.center.set(0.5, 0.5);
-  sprite.position.y = 1.5;
+  // sprite.position.y = 1.5;
   scene.add(sprite);
   
   let currentTile = 0;

@@ -1,30 +1,28 @@
-
 import * as THREE from 'three'
 import SpriteFlipbook from './SpriteFlipbook';
 import playerTextureRight from './player-sprite-right.png'
 import playerTextureLeft from './player-sprite-left.png'
-import Materials from './Materials';
 
 const PlayerAnimation = (scene) => {
 
   const spriteScale = [1.5,2,1.5]; 
 
   const boundingBox = new THREE.Box3Helper(new THREE.Box3(), 0xffff00);
-  boundingBox.position.y = 2;
   let player = boundingBox;
+  player.position.y = 1;
 
   // Sprite right
   let playerSpriteRight = SpriteFlipbook(playerTextureRight, 8, scene);
   playerSpriteRight.loop([0,1,2,3,4,5,6,7], 0.6);
   let playerRight = playerSpriteRight.sprite;
-  playerRight.position.y = 1;
+  // playerRight.position.y = 0.5;
   playerRight.scale.set(...spriteScale); 
 
   // Sprite right
   let playerSpriteLeft = SpriteFlipbook(playerTextureLeft, 8, scene);
   playerSpriteLeft.loop([0,1,2,3,4,5,6,7], 0.6);
   let playerLeft = playerSpriteLeft.sprite;
-  playerLeft.position.y = 1;
+  // playerLeft.position.y = 0.5;
   playerLeft.scale.set(...spriteScale); 
 
   // Create a box geometry
