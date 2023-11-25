@@ -3,20 +3,10 @@ import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import PlayerAnimation from './PlayerAnimation';
 import LevelController from './levelController';
-import * as STATS from 'stats.js';
 import UI from './ui';
 import Materials from './Materials';
+import DevUI from './devUI';
 
-// Set up Stats
-const stats = new STATS();
-stats.showPanel(0); // 0: FPS, 1: ms, 2: MB, 3+: custom
-document.body.appendChild(stats.dom);
-
-const stats2 = new STATS();
-stats2.showPanel(2); // 0: FPS, 1: ms, 2: MB, 3+: custom
-stats2.dom.style.position = 'absolute';
-stats2.dom.style.top = '48px';
-document.body.appendChild(stats2.dom);
 
 // Setup scene
 const scene = new THREE.Scene();
@@ -33,6 +23,7 @@ const axesHelper = new THREE.AxesHelper(1);
 scene.add(axesHelper);
 
 
+
 // Adding renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -41,6 +32,8 @@ document.body.appendChild( renderer.domElement );
 // Create Orbit control instance
 const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.update();
+let orbitControlsEnabled = false;
+orbit.enabled = orbitControlsEnabled;
 
 
 const mapSize = 60;
@@ -86,8 +79,7 @@ function onDocumentClick(event) {
 
     // Change the material to the clicked texture if the distance is within
     // allowed poximity
-    console.log(distance);
-    if (distance < 2.5) {
+    if (distance < 3) {
       clickedPlane.material = Materials.dirtMaterial;
     }
   }
@@ -153,14 +145,26 @@ function getViewportPosition(mesh, camera) {
   );
   return viewportPosition
 }
+
+function toggleWireframe(material) {
+  material.wireframe = false;
+  material.opacity = 0;
+  console.log('turning off wireframe');
+}
+let wireframeMode = true;
   
 let keyMap = {};
 
 const clock = new THREE.Clock();
 
 function animate() {
-  stats.begin();
-  stats2.begin();
+  DevUI.stats.begin();
+  DevUI.stats2.begin();
+
+  // Update obit controls if it's enabled
+  if (orbitControlsEnabled) {
+    orbit.update();
+  }
 
   let deltaTime = clock.getDelta();
   requestAnimationFrame( animate );
@@ -174,9 +178,14 @@ function animate() {
 
   playerAnimation.update(deltaTime);
 
+  // if (!DevUI.settings.wireframeMode) {
+  //   toggleWireframe(Materials.boxMaterial);
+  // } else if (DevUI.settings.wireframeMode) {
+  // }
+
 
 	renderer.render( scene, camera );
-  stats2.end();
-  stats.end();
+  DevUI.stats2.end();
+  DevUI.stats.end();
 }
 animate();

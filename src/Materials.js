@@ -9,7 +9,14 @@ const Materials = ((scene) => {
   const groundTexture = textureLoader.load(groundTextureImport);
   const groundMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, map: groundTexture});
 
-  return { dirtMaterial, groundMaterial }
+  const boxMaterial = new THREE.MeshBasicMaterial({ 
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 1,
+    });
+
+  return { dirtMaterial, groundMaterial, boxMaterial }
 })();
 
 
