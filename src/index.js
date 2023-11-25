@@ -5,6 +5,7 @@ import PlayerAnimation from './PlayerAnimation';
 import LevelController from './levelController';
 import * as STATS from 'stats.js';
 import UI from './ui';
+import Materials from './Materials';
 
 // Set up Stats
 const stats = new STATS();
@@ -61,6 +62,35 @@ levelController.render('home');
 
 // Add UI
 UI.itemBar.show();
+
+// Add a click event listener to the renderer
+renderer.domElement.addEventListener('click', onDocumentClick, false);
+
+const groundPlanes = levelController.HomeMapObj.groundPlanes;
+
+function onDocumentClick(event) {
+
+  // Calculate mouse coordinates
+  let mouse = new THREE.Vector2();
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerWidth) * 2 + 1;
+
+  // Raycasting
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+
+  // Check for intersections with the planes
+  const intersects = raycaster.intersectObjects(groundPlanes);
+
+  // If there is an intersection
+  if (intersects.length > 0) {
+    const clickedPlane = intersects[0].object;
+
+    // Change the material to the clicked texture
+    clickedPlane.material = Materials.dirtTexture;
+  }
+
+}
 
 
 // Smoothness for lerping 

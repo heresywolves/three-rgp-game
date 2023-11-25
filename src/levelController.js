@@ -11,7 +11,7 @@ const LevelController = (scene) => {
       }
     }
   }
-  return {render};
+  return {render, HomeMapObj};
 };
 
 

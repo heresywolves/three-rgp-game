@@ -1,14 +1,16 @@
 import * as THREE from 'three'
 import groundTextureImport from './maptextures/ground-texture.jpg'
+import Materials from './Materials';
 
 const HomeMap = (scene) => {
 
   // Load ground texture
-  const textureLoader = new THREE.TextureLoader();
-  const groundTexture = textureLoader.load(groundTextureImport);
+  // const textureLoader = new THREE.TextureLoader();
+  // const groundTexture = textureLoader.load(groundTextureImport);
   
   const size = 60;
   const tiles = [];
+  const groundPlanes = [];
   let offsetX = 0.5 - (size / 2);
   let offsetY = 0.5 - (size / 2);
 
@@ -17,7 +19,7 @@ const HomeMap = (scene) => {
 
       // Create a plane geometry
       const planeGeometry = new THREE.PlaneGeometry(1, 1); // You can adjust the size of the plane
-      const planeMaterial = new THREE.MeshBasicMaterial({ map: groundTexture });
+      const planeMaterial = new THREE.MeshBasicMaterial({ map: Materials.groundTexture});
       const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
       // Rotate the plane to make it horizontal
@@ -27,12 +29,13 @@ const HomeMap = (scene) => {
       plane.rotation.x = -Math.PI / 2;
 
       tiles.push({object: plane, row: i, col: 1});
+      groundPlanes.push(plane);
     }
     offsetX = 0.5 - (size / 2);
   }
 
 
-  return {tiles}
+  return {tiles, groundPlanes}
 };
 
 
