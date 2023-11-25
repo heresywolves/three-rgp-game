@@ -6,6 +6,7 @@ import LevelController from './levelController';
 import * as STATS from 'stats.js';
 import UI from './ui';
 import Materials from './Materials';
+import dirtTextureImport from './maptextures/dirt-texture.jpg'
 
 // Set up Stats
 const stats = new STATS();
@@ -22,13 +23,6 @@ document.body.appendChild(stats2.dom);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.set(0, 15, 3);
-
-
-const geometry = new THREE.PlaneGeometry( 30, 30 );
-const material = new THREE.MeshBasicMaterial( {color: 0xF4E4E0, side: THREE.DoubleSide} );
-const plane = new THREE.Mesh( geometry, material );
-scene.add( plane );
-plane.rotation.x = -0.5 * Math.PI;
 
 
 // Add grid helper
@@ -73,7 +67,7 @@ function onDocumentClick(event) {
   // Calculate mouse coordinates
   let mouse = new THREE.Vector2();
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerWidth) * 2 + 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
   // Raycasting
   const raycaster = new THREE.Raycaster();
@@ -87,7 +81,7 @@ function onDocumentClick(event) {
     const clickedPlane = intersects[0].object;
 
     // Change the material to the clicked texture
-    clickedPlane.material = Materials.dirtTexture;
+    clickedPlane.material = Materials.dirtMaterial;
   }
 
 }

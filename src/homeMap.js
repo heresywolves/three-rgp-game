@@ -19,8 +19,7 @@ const HomeMap = (scene) => {
 
       // Create a plane geometry
       const planeGeometry = new THREE.PlaneGeometry(1, 1); // You can adjust the size of the plane
-      const planeMaterial = new THREE.MeshBasicMaterial({ map: Materials.groundTexture});
-      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+      const plane = new THREE.Mesh(planeGeometry, Materials.groundMaterial);
 
       // Rotate the plane to make it horizontal
       const layer = 0.01;
