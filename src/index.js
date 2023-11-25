@@ -1,11 +1,10 @@
 import './styles.css'
 import * as THREE from 'three'
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import PlayerAnimation from './PlayerAnimation';
 import LevelController from './levelController';
 import UI from './ui';
 import Materials from './Materials';
-import DevUI from './devUI';
+import DevUIController from './devUI';
 
 
 // Setup scene
@@ -14,40 +13,23 @@ const camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.inner
 camera.position.set(0, 15, 3);
 
 
-// Add grid helper
-const gridHelper = new THREE.GridHelper(30);
-scene.add(gridHelper);
-
-// Axis helper guide initiation. 5 represents the length of the axis
-const axesHelper = new THREE.AxesHelper(1);
-scene.add(axesHelper);
-
-
-
 // Adding renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-// Create Orbit control instance
-const orbit = new OrbitControls(camera, renderer.domElement);
-orbit.update();
-let orbitControlsEnabled = false;
-orbit.enabled = orbitControlsEnabled;
-
 
 const mapSize = 60;
 
-
 const playerAnimation = PlayerAnimation(scene);
 const player = playerAnimation.player;
-
 
 const levelController = LevelController(scene);
 levelController.render('home');
 
 // Add UI
 UI.itemBar.show();
+const devUI = DevUIController(player, scene, camera, renderer);
 
 // Add a click event listener to the renderer
 renderer.domElement.addEventListener('click', onDocumentClick, false);
@@ -85,7 +67,6 @@ function onDocumentClick(event) {
   }
 
 }
-
 
 // Smoothness for lerping 
 const smoothness = 0.1 // 0 to 1 only
@@ -146,25 +127,13 @@ function getViewportPosition(mesh, camera) {
   return viewportPosition
 }
 
-function toggleWireframe(material) {
-  material.wireframe = false;
-  material.opacity = 0;
-  console.log('turning off wireframe');
-}
-let wireframeMode = true;
-  
 let keyMap = {};
 
 const clock = new THREE.Clock();
 
 function animate() {
-  DevUI.stats.begin();
-  DevUI.stats2.begin();
-
-  // Update obit controls if it's enabled
-  if (orbitControlsEnabled) {
-    orbit.update();
-  }
+  devUI.stats.begin();
+  devUI.stats2.begin();
 
   let deltaTime = clock.getDelta();
   requestAnimationFrame( animate );
@@ -178,14 +147,8 @@ function animate() {
 
   playerAnimation.update(deltaTime);
 
-  // if (!DevUI.settings.wireframeMode) {
-  //   toggleWireframe(Materials.boxMaterial);
-  // } else if (DevUI.settings.wireframeMode) {
-  // }
-
-
 	renderer.render( scene, camera );
-  DevUI.stats2.end();
-  DevUI.stats.end();
+  devUI.stats2.end();
+  devUI.stats.end();
 }
 animate();
