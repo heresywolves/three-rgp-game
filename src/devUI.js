@@ -52,8 +52,10 @@ const DevUIController = (player, scene, camera, renderer) => {
   });
   gui.add(settings, 'showGridHelper').name('Show Grid').onChange(function(value) {
     if (gridHelper.visible) {
+      axesHelper.visible = false;
       gridHelper.visible = false;
     } else {
+      axesHelper.visible = true;
       gridHelper.visible = true;
     }
   });

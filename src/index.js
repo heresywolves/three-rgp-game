@@ -5,6 +5,10 @@ import LevelController from './levelController';
 import UI from './ui';
 import Materials from './Materials';
 import DevUIController from './devUI';
+import Plant from './Plant';
+import hoeImg from './items/hoe.png'
+import Item from './Item';
+import { toolbelt } from './Toolbelt';
 
 
 // Setup scene
@@ -126,6 +130,21 @@ function getViewportPosition(mesh, camera) {
   );
   return viewportPosition
 }
+
+// Making plants and tools
+
+let plant1 = Plant('carrot');
+plant1.sprite.position.set(1.5, 0.5, 1.5);
+scene.add(plant1.sprite);
+
+let hoe = Item('Hoe', hoeImg); 
+
+toolbelt.push(hoe);
+console.log(toolbelt);
+
+UI.itemBar.refresh();
+
+// --
 
 let keyMap = {};
 
