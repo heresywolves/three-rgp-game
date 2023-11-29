@@ -36,8 +36,14 @@ body {
   height: 50px;
   bottom: 50px;
   background-color: rgb(200, 200, 200);
+  /* transition: 1s; */
 }
 
 .itembar-container .item-cell:hover {
   background-color: rgb(180, 180, 180);
+}
+
+.item-cell.selected {
+  border: 3px rgb(86, 86, 86) solid;
+  background-color: rgb(178, 178, 178);
 }
