@@ -65,7 +65,20 @@ function onDocumentClick(event) {
     // Change the material to the clicked texture if the distance is within
     // allowed poximity
     if (distance < 3) {
-      clickedPlane.material = Materials.dirtMaterial;
+      if (selectedItem.name === "Garden Hoe") {
+        clickedPlane.material = Materials.dirtMaterial;
+      } else if (selectedItem.name === 'Carrot Seeds') {
+        if (!clickedPlane.occupied) {
+          const plant = Plant('carrot');
+          const coords = new THREE.Vector3(...clickedPlane.position);
+          plant.sprite.position.set(...coords);
+          scene.add(plant.sprite);
+
+          // Add an occupied method to plane object so no more plants can be placed here
+          clickedPlane.occupied = true;
+          clickedPlane.plant = plant;
+        }
+      }
     }
   }
 
@@ -130,7 +143,14 @@ function getViewportPosition(mesh, camera) {
   return viewportPosition
 }
 
-// Making plants and tools
+// Making plants and initial tools
+
+let selectedItem;
+
+function setSelectedItem (item) {
+  selectedItem = item;
+}
+export {setSelectedItem};
 
 let plant1 = Plant('carrot');
 plant1.sprite.position.set(1.5, 0.5, 1.5);
@@ -138,8 +158,6 @@ scene.add(plant1.sprite);
 
 toolbelt.push(Items.hoe);
 toolbelt.push(Items.carrotSeeds);
-console.log(toolbelt);
-
 UI.itemBar.refresh();
 
 // --

@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { toolbelt } from './Toolbelt';
 import Items from './Items';
+import { setSelectedItem } from '.';
 
 const UI = ((scene) => {
   const uiDomElement = document.querySelector('#ui-section');
@@ -59,6 +60,7 @@ const UI = ((scene) => {
           img.classList.add(`item-id-${toolbelt[i].id}`)
           if (toolbelt[i].selected) {
             cell.classList.add('selected');
+            setSelectedItem(toolbelt[i]);
           } else {
             cell.classList.remove('selected');
           }
@@ -66,7 +68,6 @@ const UI = ((scene) => {
           cell.appendChild(img);
         }
       }
-      console.log(cells);
     }
     
 
