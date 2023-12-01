@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import dirtTextureImport from './maptextures/dirt-texture.jpg'
-import groundTextureImport from './maptextures/ground-texture.jpg'
+import dirtTextureImport from './maptextures/dirt-texture.png'
+import groundTextureImport from './maptextures/ground-texture.png'
 
 const Materials = ((scene) => {
   const textureLoader = new THREE.TextureLoader();

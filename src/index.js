@@ -17,7 +17,7 @@ camera.position.set(0, 15, 3);
 
 
 // Adding renderer
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ gammaOutput: false });
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -152,9 +152,9 @@ function setSelectedItem (item) {
 }
 export {setSelectedItem};
 
-let plant1 = Plant('carrot');
-plant1.sprite.position.set(1.5, 0.5, 1.5);
-scene.add(plant1.sprite);
+// let plant1 = Plant('carrot');
+// plant1.sprite.position.set(1.5, 0.5, 1.5);
+// scene.add(plant1.sprite);
 
 toolbelt.push(Items.hoe);
 toolbelt.push(Items.carrotSeeds);
@@ -183,6 +183,7 @@ function animate() {
   playerAnimation.update(deltaTime);
 
 	renderer.render( scene, camera );
+
   devUI.stats2.end();
   devUI.stats.end();
 }

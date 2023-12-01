@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import groundTextureImport from './maptextures/ground-texture.jpg'
 import Materials from './Materials';
 
 const HomeMap = (scene) => {
